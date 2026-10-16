@@ -1,0 +1,54 @@
+{% extends "booking/base.html" %}
+{% load static %}
+
+{% block title %}Manage booking — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Patient self-service</p>
+  <h1>Manage booking</h1>
+  <p class="lead">
+    Enter the email address you used when booking. We’ll show all appointments linked to that email,
+    with the newest ones first.
+  </p>
+</section>
+
+<section class="panel">
+  <h2>Find your appointments</h2>
+  <form method="post" class="booking-form" style="max-width:420px;">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="field">
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+    <button type="submit" class="btn">Find my bookings</button>
+  </form>
+</section>
+
+{% if searched %}
+<section class="panel">
+  <h2>Your bookings</h2>
+  {% if appointments %}
+    <div class="booking-list">
+      {% for appt in appointments %}
+        <a class="booking-preview" href="{% url 'booking:manage_booking_detail' appt.id %}">
+          <img src="{% static appt.clinician.photo_static_path %}" alt="{{ appt.clinician.name }}">
+          <div class="booking-preview-body">
+            <div class="booking-preview-top">
+              <strong>{{ appt.appointment_date|date:"D, j M Y" }} · {{ appt.start_time|time:"g:i A" }}</strong>
+              <span class="status-pill status-{{ appt.status }}">{{ appt.get_status_display }}</span>
+            </div>
+            <p>{{ appt.clinician.name }} · {{ appt.treatment.name }}</p>
+            <p class="muted">{{ appt.patient.full_name }} · Tap to view full details</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No bookings were found for that email.</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

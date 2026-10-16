@@ -1,0 +1,57 @@
+{% extends "booking/base.html" %}
+
+{% block title %}Confirm booking — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="step-label">Step 4 of 4</p>
+  <h1>Confirm your appointment</h1>
+  <p class="lead">Check the details below and enter your contact information.</p>
+  {% include "booking/includes/clinician_banner.html" %}
+</section>
+
+<div class="layout-two-col">
+  <section class="panel summary-panel">
+    <h2>Appointment summary</h2>
+    <dl class="summary-list">
+      <div><dt>Clinician</dt><dd>{{ clinician.name }}</dd></div>
+      <div><dt>Date</dt><dd>{{ appointment_date|date:"l, j F Y" }}</dd></div>
+      <div><dt>Time</dt><dd>{{ start_time|time:"g:i A" }}</dd></div>
+    </dl>
+  </section>
+
+  <section class="panel">
+    <h2>Your details</h2>
+    <form method="post" class="booking-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="field">
+        <label for="{{ form.first_name.id_for_label }}">First name</label>
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+      </div>
+      <div class="field">
+        <label for="{{ form.last_name.id_for_label }}">Last name</label>
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+      </div>
+      <div class="field">
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+      </div>
+      <div class="field">
+        <label for="{{ form.phone.id_for_label }}">Phone (optional)</label>
+        {{ form.phone }}
+        {{ form.phone.errors }}
+      </div>
+      <div class="field">
+        <label for="{{ form.treatment.id_for_label }}">Appointment type</label>
+        {{ form.treatment }}
+        {{ form.treatment.errors }}
+      </div>
+      <button type="submit" class="btn">Confirm appointment</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

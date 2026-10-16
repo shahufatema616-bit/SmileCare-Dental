@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SmileCare Dental{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'booking/styles.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="{% url 'booking:home' %}" class="brand">
+        <img src="{% static 'booking/img/logo.png' %}" alt="SmileCare Dental logo">
+        <span class="brand-text">
+          <strong>smileCare Dental</strong>
+          <span>Healthy Smiles. Brighter Futures.</span>
+        </span>
+      </a>
+      <nav>
+        <a href="{% url 'booking:home' %}">Home</a>
+        <a href="{% url 'booking:home' %}#about">About us</a>
+        <a href="{% url 'booking:manage_booking' %}">Manage booking</a>
+        <a href="{% url 'booking:select_clinician' %}" class="btn btn-small">Book Online</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <p class="message {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© SmileCare Dental · Sample clinic data for demonstration</p>
+      <p>Developer: <a href="{% url 'booking:developer' %}">Fatemazahera M. Shahu</a></p>
+    </div>
+  </footer>
+</body>
+</html>

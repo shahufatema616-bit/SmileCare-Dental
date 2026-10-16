@@ -1,0 +1,72 @@
+{% extends "booking/base.html" %}
+
+{% block title %}Booking update — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="panel success-panel">
+  <p class="eyebrow">
+    {% if appointment.status == "cancelled" or appointment.status == "late_cancel" %}
+      Booking cancelled
+    {% else %}
+      Booking confirmed
+    {% endif %}
+  </p>
+  <h1>
+    {% if appointment.status == "cancelled" or appointment.status == "late_cancel" %}
+      Appointment cancelled
+    {% else %}
+      You're all set
+    {% endif %}
+  </h1>
+  <p class="lead">
+    Thanks {{ appointment.patient.first_name }}. Here are your booking details.
+  </p>
+
+  {% include "booking/includes/clinician_banner.html" with clinician=appointment.clinician %}
+
+  <dl class="summary-list">
+    <div><dt>Status</dt><dd>{{ appointment.get_status_display }}</dd></div>
+    <div><dt>Clinician</dt><dd>{{ appointment.clinician.name }}</dd></div>
+    <div><dt>Treatment</dt><dd>{{ appointment.treatment.name }}</dd></div>
+    <div><dt>Date</dt><dd>{{ appointment.appointment_date|date:"l, j F Y" }}</dd></div>
+    <div><dt>Time</dt><dd>{{ appointment.start_time|time:"g:i A" }}</dd></div>
+    <div><dt>Email</dt><dd>{{ appointment.patient.email }}</dd></div>
+  </dl>
+
+  {% if appointment.status == "confirmed" or appointment.status == "booked" %}
+    <p class="muted">
+      A confirmation email has been sent, and reminder notices have been scheduled.
+      To manage this booking later, open <strong>Manage booking</strong> and enter
+      <strong>{{ appointment.patient.email }}</strong>.
+    </p>
+
+    {% if latest_email %}
+      <div class="email-preview">
+        <h3>
+          {% if "rescheduled" in latest_email.message|lower %}
+            Reschedule email (demo copy)
+          {% elif "cancelled" in latest_email.message|lower %}
+            Cancellation email (demo copy)
+          {% else %}
+            Confirmation email (demo copy)
+          {% endif %}
+        </h3>
+        <p class="muted">
+          In local demo mode, email also prints in the terminal running
+          <code>python3 manage.py runserver</code> — look for
+          <strong>SMILECARE EMAIL SENT</strong>.
+        </p>
+        <pre>{{ latest_email.message }}</pre>
+      </div>
+    {% endif %}
+
+    <p style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+      <a class="btn btn-secondary" href="{% url 'booking:manage_booking' %}">Manage booking</a>
+      <a class="btn btn-secondary" href="{% url 'booking:start_reschedule' appointment.id %}">Reschedule</a>
+      <a class="btn btn-secondary" href="{% url 'booking:cancel_booking' appointment.id %}">Cancel</a>
+    </p>
+  {% endif %}
+
+  <a href="{% url 'booking:home' %}" class="btn">Back to home</a>
+</section>
+{% endblock %}

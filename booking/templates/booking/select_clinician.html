@@ -1,0 +1,27 @@
+{% extends "booking/base.html" %}
+{% load static %}
+
+{% block title %}Choose clinician — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="step-label">Step 1 of 4</p>
+  <h1>Choose a clinician</h1>
+  <p class="lead">Select who you would like to see at SmileCare Dental.</p>
+</section>
+
+<div class="card-grid">
+  {% for clinician in clinicians %}
+    <article class="card selectable">
+      <div class="card-photo" style="background-image: url('{% static clinician.photo_static_path %}');" role="img" aria-label="{{ clinician.name }}"></div>
+      <div class="card-body">
+        <h3>{{ clinician.name }}</h3>
+        <p class="muted">{{ clinician.title }}</p>
+        <p>{{ clinician.specialty }}</p>
+        <p class="muted">{{ clinician.bio }}</p>
+        <a href="{% url 'booking:select_date' clinician.id %}" class="btn">Continue</a>
+      </div>
+    </article>
+  {% endfor %}
+</div>
+{% endblock %}

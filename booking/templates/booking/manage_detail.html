@@ -1,0 +1,38 @@
+{% extends "booking/base.html" %}
+{% load static %}
+
+{% block title %}Booking details — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Booking details</p>
+  <h1>{{ appointment.appointment_date|date:"l, j F Y" }}</h1>
+  <p class="lead">{{ appointment.start_time|time:"g:i A" }} · {{ appointment.get_status_display }}</p>
+  {% include "booking/includes/clinician_banner.html" with clinician=appointment.clinician %}
+</section>
+
+<section class="panel">
+  <dl class="summary-list">
+    <div><dt>Patient</dt><dd>{{ appointment.patient.full_name }}</dd></div>
+    <div><dt>Email</dt><dd>{{ appointment.patient.email }}</dd></div>
+    <div><dt>Clinician</dt><dd>{{ appointment.clinician.name }}</dd></div>
+    <div><dt>Treatment</dt><dd>{{ appointment.treatment.name }}</dd></div>
+    <div><dt>Date</dt><dd>{{ appointment.appointment_date|date:"l, j F Y" }}</dd></div>
+    <div><dt>Time</dt><dd>{{ appointment.start_time|time:"g:i A" }}</dd></div>
+    <div><dt>Status</dt><dd>{{ appointment.get_status_display }}</dd></div>
+  </dl>
+
+  {% if appointment.status == "confirmed" or appointment.status == "booked" %}
+    <p style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:1rem;">
+      <a class="btn" href="{% url 'booking:start_reschedule' appointment.id %}">Reschedule</a>
+      <a class="btn btn-secondary" href="{% url 'booking:cancel_booking' appointment.id %}">Cancel booking</a>
+    </p>
+  {% else %}
+    <p class="muted" style="margin-top:1rem;">This booking can no longer be changed online.</p>
+  {% endif %}
+
+  <p style="margin-top:1rem;">
+    <a href="{% url 'booking:manage_booking' %}?show=1">← Back to my bookings</a>
+  </p>
+</section>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "booking/base.html" %}
+
+{% block title %}Clinic reports — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">SmileCare Dental admin</p>
+  <h1>Clinic reports</h1>
+  <p class="lead">
+    Overview for {{ today|date:"j M Y" }} to {{ week_end|date:"j M Y" }}.
+  </p>
+  <p><a href="/admin/">← Back to admin home</a></p>
+</section>
+
+<section class="feature-strip">
+  <article class="feature-card">
+    <div class="icon">{{ upcoming|length }}</div>
+    <h3>Upcoming (7 days)</h3>
+    <p class="muted">Confirmed/booked appointments</p>
+  </article>
+  <article class="feature-card">
+    <div class="icon">{{ unused_slots }}</div>
+    <h3>Unused slots</h3>
+    <p class="muted">Open slots across clinicians this week</p>
+  </article>
+  <article class="feature-card">
+    <div class="icon">{{ recent_no_shows|length }}</div>
+    <h3>No-shows (30 days)</h3>
+    <p class="muted">Marked no-show appointments</p>
+  </article>
+</section>
+
+<section class="layout-two-col">
+  <article class="panel">
+    <h2>Reminder status</h2>
+    <dl class="summary-list">
+      <div><dt>Pending</dt><dd>{{ reminder_stats.pending }}</dd></div>
+      <div><dt>Sent</dt><dd>{{ reminder_stats.sent }}</dd></div>
+      <div><dt>Failed</dt><dd>{{ reminder_stats.failed }}</dd></div>
+    </dl>
+    <p class="muted" style="margin-top:1rem;">
+      Run <code>python manage.py send_due_reminders</code> to process due reminders.
+    </p>
+  </article>
+
+  <article class="panel">
+    <h2>Status counts (30 days)</h2>
+    <dl class="summary-list">
+      {% for row in status_counts %}
+        <div><dt>{{ row.status }}</dt><dd>{{ row.total }}</dd></div>
+      {% empty %}
+        <div><dt>None</dt><dd>0</dd></div>
+      {% endfor %}
+    </dl>
+    <p class="muted" style="margin-top:1rem;">
+      Slot utilisation this week: {{ booked_slots }} booked / {{ total_slots }} total.
+    </p>
+  </article>
+</section>
+
+<section class="panel">
+  <h2>Upcoming appointments</h2>
+  {% if upcoming %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Ref</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Patient</th>
+            <th>Clinician</th>
+            <th>Treatment</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appt in upcoming %}
+            <tr>
+              <td>#{{ appt.id }}</td>
+              <td>{{ appt.appointment_date|date:"j M Y" }}</td>
+              <td>{{ appt.start_time|time:"g:i A" }}</td>
+              <td>{{ appt.patient.full_name }}</td>
+              <td>{{ appt.clinician.name }}</td>
+              <td>{{ appt.treatment.name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No upcoming appointments in the next 7 days.</p>
+  {% endif %}
+</section>
+
+<section class="panel">
+  <h2>Recent no-shows</h2>
+  {% if recent_no_shows %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Ref</th>
+            <th>Date</th>
+            <th>Patient</th>
+            <th>Clinician</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appt in recent_no_shows %}
+            <tr>
+              <td>#{{ appt.id }}</td>
+              <td>{{ appt.appointment_date|date:"j M Y" }}</td>
+              <td>{{ appt.patient.full_name }}</td>
+              <td>{{ appt.clinician.name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No no-shows recorded in the last 30 days.</p>
+  {% endif %}
+</section>
+{% endblock %}

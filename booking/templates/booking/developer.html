@@ -1,0 +1,56 @@
+{% extends "booking/base.html" %}
+
+{% block title %}Developer — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Project credits</p>
+  <h1>Developer</h1>
+  <p class="lead">
+    This booking system was built as a student learning project for a dental clinic appointment
+    booking and reminder solution.
+  </p>
+</section>
+
+<section class="about-hero">
+  <article class="panel">
+    <h2>Student details</h2>
+    <dl class="summary-list">
+      <div>
+        <dt>Student name</dt>
+        <dd>{{ student_name }}</dd>
+      </div>
+      <div>
+        <dt>Student number</dt>
+        <dd>{{ student_id }}</dd>
+      </div>
+      <div>
+        <dt>Course</dt>
+        <dd>{{ course_name }}</dd>
+      </div>
+      <div>
+        <dt>Project</dt>
+        <dd>{{ project_title }}</dd>
+      </div>
+      <div>
+        <dt>Supervisor / tutor</dt>
+        <dd>{{ supervisor_name }}</dd>
+      </div>
+    </dl>
+  </article>
+
+  <aside class="about-card">
+    <h2>About this site</h2>
+    <p>
+      SmileCare Dental is a sample clinic used to demonstrate online appointment booking,
+      confirmation messaging, and clinic administration features.
+    </p>
+    <div class="placeholder-note">
+      Academic project reference (for assessors): Academic Project 21 —
+      Dental Clinic Appointment Booking and Reminder System.
+    </div>
+  </aside>
+</section>
+
+<p><a href="{% url 'booking:home' %}">← Back to home</a></p>
+{% endblock %}

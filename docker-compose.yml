@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    container_name: smilecare-dental
+    ports:
+      - "8091:8000"
+    environment:
+      ALLOW_ALL_HOSTS: "true"
+      SQLITE_PATH: /app/data/db.sqlite3
+      DEBUG: "1"
+    volumes:
+      - smilecare_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  smilecare_data:

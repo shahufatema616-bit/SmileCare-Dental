@@ -1,0 +1,79 @@
+{% extends "booking/base.html" %}
+{% load static %}
+
+{% block title %}SmileCare Dental — Book online{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Online appointment booking</p>
+    <h1>Book your dental visit in a few simple steps</h1>
+    <p class="lead">
+      Choose your clinician, pick a date and time that works for you, then confirm your appointment.
+      You will receive a confirmation email after booking.
+    </p>
+    <a href="{% url 'booking:select_clinician' %}" class="btn">Book Online</a>
+  </div>
+  <div class="hero-media" role="img" aria-label="Happy patient after a dental visit">
+    <div class="caption">Welcome to SmileCare Dental</div>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="about-media">
+    <img src="{% static 'booking/img/about-clinic.jpg' %}" alt="SmileCare Dental consultation room">
+  </div>
+  <div class="about-copy panel">
+    <p class="eyebrow">About us</p>
+    <h2>Care that puts your smile first</h2>
+    <p class="lead">
+      SmileCare Dental is a friendly local clinic focused on comfortable check-ups, clear communication,
+      and simple online booking. Our team helps patients find the right clinician, book with confidence,
+      and stay on top of follow-up care.
+    </p>
+    <ul class="about-points">
+      <li>Experienced dentists and hygienists for everyday and restorative care</li>
+      <li>Easy online booking with confirmation by email</li>
+      <li>Calm clinic environment designed around patient comfort</li>
+    </ul>
+    <p class="muted">Healthy Smiles. Brighter Futures.</p>
+  </div>
+</section>
+
+<section class="feature-strip" id="book">
+  <article class="feature-card">
+    <div class="icon">1</div>
+    <h3>Choose a clinician</h3>
+    <p class="muted">Browse available dentists and hygienists at the clinic.</p>
+  </article>
+  <article class="feature-card">
+    <div class="icon">2</div>
+    <h3>Pick date & time</h3>
+    <p class="muted">Only open appointment slots are shown for each day.</p>
+  </article>
+  <article class="feature-card">
+    <div class="icon">3</div>
+    <h3>Confirm details</h3>
+    <p class="muted">Enter your details and get a confirmation by email.</p>
+  </article>
+</section>
+
+<section class="panel">
+  <h2>Our clinicians</h2>
+  <div class="card-grid">
+    {% for clinician in clinicians %}
+      <article class="card">
+        <div class="card-photo" style="background-image: url('{% static clinician.photo_static_path %}');" role="img" aria-label="{{ clinician.name }}"></div>
+        <div class="card-body">
+          <h3>{{ clinician.name }}</h3>
+          <p class="muted">{{ clinician.title }}{% if clinician.specialty %} · {{ clinician.specialty }}{% endif %}</p>
+          <p>{{ clinician.bio }}</p>
+          <a href="{% url 'booking:select_date' clinician.id %}" class="btn btn-secondary">Book with {{ clinician.name|truncatewords:2 }}</a>
+        </div>
+      </article>
+    {% empty %}
+      <p>No clinicians loaded yet. Run <code>python manage.py seed_data</code>.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

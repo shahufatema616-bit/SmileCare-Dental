@@ -1,0 +1,35 @@
+{% extends "booking/base.html" %}
+
+{% block title %}Confirm reschedule — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Reschedule</p>
+  <h1>Confirm new appointment time</h1>
+  <p class="lead">Review the new details before saving.</p>
+  {% include "booking/includes/clinician_banner.html" %}
+</section>
+
+<section class="layout-two-col">
+  <article class="panel">
+    <h2>Previous</h2>
+    <dl class="summary-list">
+      <div><dt>Clinician</dt><dd>{{ appointment.clinician.name }}</dd></div>
+      <div><dt>Date</dt><dd>{{ appointment.appointment_date|date:"l, j F Y" }}</dd></div>
+      <div><dt>Time</dt><dd>{{ appointment.start_time|time:"g:i A" }}</dd></div>
+    </dl>
+  </article>
+  <article class="panel">
+    <h2>New</h2>
+    <dl class="summary-list">
+      <div><dt>Clinician</dt><dd>{{ clinician.name }}</dd></div>
+      <div><dt>Date</dt><dd>{{ appointment_date|date:"l, j F Y" }}</dd></div>
+      <div><dt>Time</dt><dd>{{ start_time|time:"g:i A" }}</dd></div>
+    </dl>
+    <form method="post" style="margin-top:1rem;">
+      {% csrf_token %}
+      <button type="submit" class="btn">Confirm reschedule</button>
+    </form>
+  </article>
+</section>
+{% endblock %}

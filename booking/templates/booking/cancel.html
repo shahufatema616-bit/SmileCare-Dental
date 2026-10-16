@@ -1,0 +1,26 @@
+{% extends "booking/base.html" %}
+
+{% block title %}Cancel booking — SmileCare Dental{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Cancel appointment</p>
+  <h1>Cancel booking #{{ appointment.id }}</h1>
+  <p class="lead">
+    {{ appointment.clinician.name }} on {{ appointment.appointment_date|date:"l, j F Y" }}
+    at {{ appointment.start_time|time:"g:i A" }}
+  </p>
+</section>
+
+<section class="panel">
+  <form method="post" class="booking-form">
+    {% csrf_token %}
+    <div class="field">
+      <label for="{{ form.reason.id_for_label }}">{{ form.reason.label }}</label>
+      {{ form.reason }}
+    </div>
+    <button type="submit" class="btn">Confirm cancellation</button>
+    <a href="{% url 'booking:manage_booking' %}?ref={{ appointment.id }}" class="btn btn-secondary">Go back</a>
+  </form>
+</section>
+{% endblock %}

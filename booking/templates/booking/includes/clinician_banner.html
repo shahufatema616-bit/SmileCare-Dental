@@ -1,0 +1,9 @@
+{% load static %}
+<div class="clinician-banner">
+  <img src="{% static clinician.photo_static_path %}" alt="{{ clinician.name }}">
+  <div>
+    <p class="eyebrow">Your clinician</p>
+    <h3>{{ clinician.name }}</h3>
+    <p class="muted">{{ clinician.title }}{% if clinician.specialty %} · {{ clinician.specialty }}{% endif %}</p>
+  </div>
+</div>
